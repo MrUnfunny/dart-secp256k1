@@ -1,0 +1,10 @@
+{
+  "files.associations": {
+    "*.ejs": "html",
+    "secp256k1_ecdh.h": "c",
+    "ostream": "cpp",
+    "secp256k1.h": "c",
+    "string_view": "cpp",
+    "a.h": "c"
+  }
+}
