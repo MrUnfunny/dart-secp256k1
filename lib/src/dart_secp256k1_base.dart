@@ -1,4 +1,6 @@
 import 'dart:ffi';
+import 'dart:io';
+import 'package:path/path.dart' as path;
 
 import 'package:dart_secp256k1/src/utils.dart';
 import 'package:ffi/ffi.dart';
@@ -7,17 +9,42 @@ import '../generated/generated_bindings.dart';
 import 'classes.dart';
 
 class Secp256k1 {
-  final ffi = NativeLibrary(
-    DynamicLibrary.open(
-      "native/build/libsecp256k1.so",
-    ),
-  );
+  NativeLibrary ffi;
+
+  Secp256k1(DynamicLibrary dynamicLibrary)
+      : ffi = NativeLibrary(dynamicLibrary);
+  //: ffi = NativeLibrary(
+  //   (Platform.isIOS)
+  //       ? DynamicLibrary.process()
+  //       : DynamicLibrary.open(
+  //           (Platform.isMacOS)
+  //               ? path.join(
+  //                   Directory.current.path,
+  //                   "native",
+  //                   "build",
+  //                   "libsecp256k1.dylib",
+  //                 )
+  //               : Platform.isWindows
+  //                   ? path.join(
+  //                       Directory.current.path,
+  //                       "native",
+  //                       "build",
+  //                       "libsecp256k1.dll",
+  //                     )
+  //                   : path.join(
+  //                       Directory.current.path,
+  //                       "native",
+  //                       "build",
+  //                       "libsecp256k1.so",
+  //                     ),
+  //         ),
+  // );
 
   String ecdh(List<int> privateKey, Secp256k1PublicKey publicKey) {
     String result = '';
 
-    final pubKeyX = bigIntToByteData(publicKey.X).reversed.toList();
-    final pubKeyY = bigIntToByteData(publicKey.Y).reversed.toList();
+    final pubKeyX = bigIntToUintList(publicKey.X).reversed.toList();
+    final pubKeyY = bigIntToUintList(publicKey.Y).reversed.toList();
 
     final Pointer<UnsignedChar> secretKeyList = malloc.allocate(32);
     final Pointer<UnsignedChar> publicKeyList = malloc.allocate(64);

@@ -268,7 +268,7 @@ bool verify(BigInt n, BigInt p, BigInt a, List<BigInt> pointG,
   return false;
 }
 
-Uint8List bigIntToByteData(BigInt bigInt) {
+Uint8List bigIntToUintList(BigInt bigInt) {
   final data = ByteData((bigInt.bitLength / 8).ceil());
 
   for (var i = 1; i <= data.lengthInBytes; i++) {

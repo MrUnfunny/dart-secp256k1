@@ -36,7 +36,7 @@ elseif(LINUX)
   set_target_properties(libsecp256k1 PROPERTIES INTERFACE_INCLUDE_DIRECTORIES ${PROJECT_SOURCE_DIR}/contrib/secp256k1/include)
 else()
   add_library(libsecp256k1 STATIC IMPORTED)
-  set_target_properties(libsecp256k1 PROPERTIES IMPORTED_LOCATION ${PROJECT_SOURCE_DIR}/contrib/secp256k1/.libs/libsecp256k1.so)
+  set_target_properties(libsecp256k1 PROPERTIES IMPORTED_LOCATION ${PROJECT_SOURCE_DIR}/contrib/secp256k1/.libs/libsecp256k1.a)
   set_target_properties(libsecp256k1 PROPERTIES INTERFACE_INCLUDE_DIRECTORIES ${PROJECT_SOURCE_DIR}/contrib/secp256k1/include)
 endif()
 

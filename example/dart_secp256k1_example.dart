@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:dart_secp256k1/dart_secp256k1.dart';
 import 'package:dart_secp256k1/src/classes.dart';
 
@@ -73,7 +75,9 @@ void main() {
   var pubKeyHex =
       "043b5ac2b005c78297272c0f5dbeefd88cec42db09392ac7cb1e2c64689ca1fe634631916ee95dbd892ffeda37e31d04689aa1715fa1c7dc6f8a5fcdf20c3ffa78";
 
-  final secret = Secp256k1().ecdh(
+  final secret = Secp256k1(DynamicLibrary.open(
+          "/Users/mohitsingh/Desktop/rnd/dart-secp256k1/native/build/libsecp256k1.dylib"))
+      .ecdh(
     seckey1,
     Secp256k1PublicKey.fromHex(pubKeyHex),
   );
