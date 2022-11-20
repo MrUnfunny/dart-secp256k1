@@ -1,8 +1,47 @@
 import 'dart:ffi';
 
+import 'package:dart_secp256k1/src/utils.dart';
 import 'package:ffi/ffi.dart';
 
 import '../generated/generated_bindings.dart';
+import 'classes.dart';
+
+class Secp256k1 {
+  final ffi = NativeLibrary(
+    DynamicLibrary.open(
+      "native/build/libsecp256k1.so",
+    ),
+  );
+
+  String ecdh(List<int> privateKey, Secp256k1PublicKey publicKey) {
+    String result = '';
+
+    final pubKeyX = bigIntToByteData(publicKey.X).reversed.toList();
+    final pubKeyY = bigIntToByteData(publicKey.Y).reversed.toList();
+
+    final Pointer<UnsignedChar> secretKeyList = malloc.allocate(32);
+    final Pointer<UnsignedChar> publicKeyList = malloc.allocate(64);
+    final Pointer<UnsignedChar> res = malloc.allocate(32);
+
+    for (int i = 0; i < 32; i++) {
+      secretKeyList[i] = privateKey[i];
+      publicKeyList[i] = pubKeyX[i];
+      publicKeyList[32 + i] = pubKeyY[i];
+    }
+
+    ffi.ecdh(secretKeyList, publicKeyList, res);
+
+    for (int i = 0; i < 32; i++) {
+      result += res[i].toRadixString(16);
+    }
+
+    malloc.free(secretKeyList);
+    malloc.free(publicKeyList);
+    malloc.free(res);
+
+    return result;
+  }
+}
 
 void main() {
   var seckey1 = [
@@ -73,33 +112,12 @@ void main() {
     0xe1,
     0x8b,
   ];
+  var pubKeyHex =
+      "043b5ac2b005c78297272c0f5dbeefd88cec42db09392ac7cb1e2c64689ca1fe634631916ee95dbd892ffeda37e31d04689aa1715fa1c7dc6f8a5fcdf20c3ffa78";
 
-  final ffi = NativeLibrary(
-    DynamicLibrary.open(
-      "/home/mohit/Desktop/dart-secp256k1/dart-secp256k1/trytest/build/libtap-protocol.so",
-    ),
+  final secret = Secp256k1().ecdh(
+    seckey1,
+    Secp256k1PublicKey.fromHex(pubKeyHex),
   );
-
-  final Pointer<UnsignedChar> s1 = malloc.allocate(32);
-  final Pointer<UnsignedChar> s2 = malloc.allocate(32);
-  final Pointer<UnsignedChar> res = malloc.allocate(32);
-
-  for (int i = 0; i < 32; i++) {
-    s1[i] = seckey1[i];
-    s2[i] = seckey2[i];
-  }
-
-  ffi.tryFunc(s1, s2, res);
-
-  String finalResult = '';
-
-  for (int i = 0; i < 32; i++) {
-    finalResult += res.elementAt(i).value.toRadixString(16);
-  }
-
-  print('\n\nresult is $finalResult');
-
-  malloc.free(s1);
-  malloc.free(s2);
-  malloc.free(res);
+  print('secret is $secret');
 }

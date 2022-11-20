@@ -18,33 +18,25 @@ class NativeLibrary {
           lookup)
       : _lookup = lookup;
 
-  void tryFunc(
-    ffi.Pointer<ffi.UnsignedChar> seckey1,
-    ffi.Pointer<ffi.UnsignedChar> seckey2,
+  void ecdh(
+    ffi.Pointer<ffi.UnsignedChar> seckey,
+    ffi.Pointer<ffi.UnsignedChar> pub_key,
     ffi.Pointer<ffi.UnsignedChar> shared_secret,
   ) {
-    return _tryFunc(
-      seckey1,
-      seckey2,
+    return _ecdh(
+      seckey,
+      pub_key,
       shared_secret,
     );
   }
 
-  late final _tryFuncPtr = _lookup<
+  late final _ecdhPtr = _lookup<
       ffi.NativeFunction<
           ffi.Void Function(
               ffi.Pointer<ffi.UnsignedChar>,
               ffi.Pointer<ffi.UnsignedChar>,
-              ffi.Pointer<ffi.UnsignedChar>)>>('tryFunc');
-  late final _tryFunc = _tryFuncPtr.asFunction<
+              ffi.Pointer<ffi.UnsignedChar>)>>('ecdh');
+  late final _ecdh = _ecdhPtr.asFunction<
       void Function(ffi.Pointer<ffi.UnsignedChar>,
           ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
-
-  void print_hello() {
-    return _print_hello();
-  }
-
-  late final _print_helloPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function()>>('print_hello');
-  late final _print_hello = _print_helloPtr.asFunction<void Function()>();
 }

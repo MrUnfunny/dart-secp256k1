@@ -5,6 +5,8 @@
     "ostream": "cpp",
     "secp256k1.h": "c",
     "string_view": "cpp",
-    "a.h": "c"
+    "a.h": "c",
+    "random.h": "c",
+    "string.h": "c"
   }
 }

@@ -1,0 +1,1 @@
+void ecdh(unsigned char *seckey, unsigned char *pub_key, unsigned char *shared_secret);
