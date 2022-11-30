@@ -1,19 +1,20 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(secp256k1 LANGUAGES C)
+project(secp256k1 LANGUAGES CXX)
+set(CMAKE_CXX_STANDARD 17)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(${PROJECT_NAME}_HEADERS
-        include/a.h
+        include/a.hpp
         )
 
 set(${PROJECT_NAME}_SOURCES 
-        src/a.c
+        src/a.cpp
         )
 
-add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_HEADERS} ${${PROJECT_NAME}_SOURCES})
+add_executable(${PROJECT_NAME} "src/a.cpp")
 
 
 if (UNIX)

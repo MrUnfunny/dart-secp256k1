@@ -19,4 +19,4 @@ ffigen:
   output: "lib/generated/generated_bindings.dart"
   headers:
     entry-points:
-      - "/home/mohit/Desktop/dart-secp256k1/dart-secp256k1/trytest/include/a.h"
+      - "native/include/a.hpp"

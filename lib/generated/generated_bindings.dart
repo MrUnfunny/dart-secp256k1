@@ -39,4 +39,26 @@ class NativeLibrary {
   late final _ecdh = _ecdhPtr.asFunction<
       void Function(ffi.Pointer<ffi.UnsignedChar>,
           ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
+
+  void CT_sig_to_pubkey(
+    ffi.Pointer<ffi.UnsignedChar> resPubKey,
+    ffi.Pointer<ffi.UnsignedChar> msgHash,
+    ffi.Pointer<ffi.UnsignedChar> signature,
+  ) {
+    return _CT_sig_to_pubkey(
+      resPubKey,
+      msgHash,
+      signature,
+    );
+  }
+
+  late final _CT_sig_to_pubkeyPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Void Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('CT_sig_to_pubkey');
+  late final _CT_sig_to_pubkey = _CT_sig_to_pubkeyPtr.asFunction<
+      void Function(ffi.Pointer<ffi.UnsignedChar>,
+          ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 }
