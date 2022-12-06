@@ -14,8 +14,7 @@ set(${PROJECT_NAME}_SOURCES
         src/a.cpp
         )
 
-add_executable(${PROJECT_NAME} "src/a.cpp")
-
+add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_HEADERS} ${${PROJECT_NAME}_SOURCES})
 
 if (UNIX)
   add_compile_options(-fPIC)

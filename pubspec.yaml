@@ -16,6 +16,8 @@ dev_dependencies:
   ffigen: ^7.2.0
 
 ffigen:
+  name: secp256k1
+  description: dart bindings for secp256k1.
   output: "lib/generated/generated_bindings.dart"
   headers:
     entry-points:

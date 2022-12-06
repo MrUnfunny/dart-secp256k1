@@ -1,7 +1,19 @@
 import 'dart:ffi';
 
 import 'package:dart_secp256k1/dart_secp256k1.dart';
-import 'package:dart_secp256k1/src/classes.dart';
+
+int recIdFromHeader(header) {
+  var headerNum = header & 0xff;
+  if (headerNum >= 39) {
+    headerNum -= 12;
+  } else if (headerNum >= 35) {
+    headerNum -= 8;
+  } else if (headerNum >= 31) {
+    headerNum -= 4;
+  }
+  final recId = headerNum - 27;
+  return recId;
+}
 
 void main() {
   final secp = Secp256k1(
@@ -111,7 +123,8 @@ void main() {
     0xe4,
   ];
 
-  final resPubKey = secp.ecdhRecover(sig, msgHash);
+  final recId = recIdFromHeader(sig.first);
+  final resPubKey = secp.ecdsaRecover(sig.sublist(1), msgHash, recId);
 
   var seckey1 = [
     0xd7,
@@ -147,40 +160,40 @@ void main() {
     0xb3,
     0x07,
   ];
-  var seckey2 = [
-    0xff,
-    0xba,
-    0x10,
-    0xfb,
-    0x25,
-    0x4d,
-    0xb0,
-    0x04,
-    0xc7,
-    0x60,
-    0xfe,
-    0x24,
-    0x40,
-    0x20,
-    0x12,
-    0xc6,
-    0xae,
-    0xc3,
-    0xed,
-    0x2e,
-    0x7e,
-    0xfb,
-    0x7d,
-    0x77,
-    0x9a,
-    0x53,
-    0x3a,
-    0x44,
-    0x92,
-    0xda,
-    0xe1,
-    0x8b,
-  ];
+  // var seckey2 = [
+  //   0xff,
+  //   0xba,
+  //   0x10,
+  //   0xfb,
+  //   0x25,
+  //   0x4d,
+  //   0xb0,
+  //   0x04,
+  //   0xc7,
+  //   0x60,
+  //   0xfe,
+  //   0x24,
+  //   0x40,
+  //   0x20,
+  //   0x12,
+  //   0xc6,
+  //   0xae,
+  //   0xc3,
+  //   0xed,
+  //   0x2e,
+  //   0x7e,
+  //   0xfb,
+  //   0x7d,
+  //   0x77,
+  //   0x9a,
+  //   0x53,
+  //   0x3a,
+  //   0x44,
+  //   0x92,
+  //   0xda,
+  //   0xe1,
+  //   0x8b,
+  // ];
   var pubKeyHex =
       "043b5ac2b005c78297272c0f5dbeefd88cec42db09392ac7cb1e2c64689ca1fe634631916ee95dbd892ffeda37e31d04689aa1715fa1c7dc6f8a5fcdf20c3ffa78";
 
@@ -190,4 +203,7 @@ void main() {
   );
 
   print('res pub key is $resPubKey');
+  print('secret is $secret');
+
+  return;
 }
